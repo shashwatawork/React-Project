@@ -138,8 +138,6 @@
 }
 .main_layout{
     display: grid;
-
-
     margin:0 auto;
     grid-template-columns: repeat(6,1fr);
     grid-template-rows: auto auto auto;

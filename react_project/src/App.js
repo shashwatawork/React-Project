@@ -10,7 +10,7 @@ import Checkout from './components/Checkout';
 import MyOrders from './components/MyOrders';
 import Category from './components/Category';
 import Header from './components/Header';
-
+import Footer from './components/Footer.js';
 function App() {
   return (
       <Router>
@@ -24,8 +24,10 @@ function App() {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/my-orders" element={<MyOrders />} />
         <Route path="/category/:categoryName" element={<Category />} />
+        {/* <Route path="" element={}/> */}
         {/* <Route path='' element={}></Route> */}
       </Routes>
+      <Footer />
     </Router>
   );
 }

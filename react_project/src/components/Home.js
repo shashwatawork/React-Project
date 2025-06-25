@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../css/Home.css'
+import '../css/Home.css';
 
 function Home() {
   const [popularProducts, setPopularProducts] = useState([]);
   const [trendyProducts, setTrendyProducts] = useState([]);
-  // const navigate = useNavigate();
+  const [current, setCurrent] = useState(0);
 
-useEffect(() => {
-  axios.get('http://localhost:3001/products?category=bridal&_limit=5')
-    .then(res => setPopularProducts(res.data || []))
-    .catch(err => console.error('Error fetching popular products:', err));
+  useEffect(() => {
+    axios.get('http://localhost:3001/products?category=bridal&_limit=5')
+      .then(res => setPopularProducts(res.data || []))
+      .catch(err => console.error('Error fetching popular products:', err));
 
-  axios.get('http://localhost:3001/products?_sort=id&_order=desc&_limit=8')
-    .then(res => setTrendyProducts(res.data || []))
-    .catch(err => console.error('Error fetching trendy products:', err));
-}, []);
+    axios.get('http://localhost:3001/products?_sort=id&_order=desc&_limit=8')
+      .then(res => setTrendyProducts(res.data || []))
+      .catch(err => console.error('Error fetching trendy products:', err));
+  }, []);
 
+  const nextSlide = () => setCurrent((current + 1) % popularProducts.length);
+  const prevSlide = () => setCurrent((current - 1 + popularProducts.length) % popularProducts.length);
 
   return (
     <div>
@@ -31,7 +33,6 @@ useEffect(() => {
             Collections
           </div>
         </div>
-
         <div className="second_pic">
           <a href="/category/bridal">
             <img src="/assets/homegrid/bridealweargrid.png.png" alt="Bridal Wear" width="100%" className="luxury-img" />
@@ -42,7 +43,6 @@ useEffect(() => {
             Alankaar Brides
           </div>
         </div>
-
         <div className="third_pic">
           <a href="/category/groom">
             <img src="/assets/homegrid/groomswear.png" alt="Grooms Wear" width="100%" height="100%" className="luxury-img" />
@@ -53,7 +53,6 @@ useEffect(() => {
             Alankaar Grooms
           </div>
         </div>
-
         <div className="fouth_pic">
           <a href="/category/jewellery">
             <img src="/assets/homegrid/jewellerygrid.png" alt="Jewellery" width="100%" height="100%" className="luxury-img" />
@@ -64,7 +63,6 @@ useEffect(() => {
             Alankaar Jewellery
           </div>
         </div>
-
         <div className="fifth_pic">
           <a href="#plw">
             <img src="/assets/homegrid/occasionwear.png" alt="Trending" width="100%" height="100%" className="luxury-img" />
@@ -79,24 +77,27 @@ useEffect(() => {
 
       {/* Carousel */}
       {popularProducts.length > 0 && (
+        <>
         <div style={{ width: '100%', marginTop: '100px', textAlign: 'center' }}>
           <h1 style={{ fontFamily: 'MonteCarlo', fontSize: '60px', fontWeight: 600, color: '#7d6a2c' }}>
             A quick Glance...
           </h1>
-          <div className="carousel-wrapper">
-            {popularProducts.map(item => (
-              <div key={item.id} className="carousel-slide">
-                <a href={`/details/${item.id}`}>
-                  <img src={item.image} alt={item.name} className="product-header-image" />
-                </a>
-                <div className="carousel-caption">
-                  <h3>{item.name}</h3>
-                  <p>{item.description}</p>
-                </div>
+          <div className="carousel-wrapper" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <button onClick={prevSlide} style={{ fontSize: '2rem', marginRight: '20px' }}>&lt;</button>
+            <div className="carousel-slide">
+              <a href={`/details/${popularProducts[current].id}`}>
+                <img src={popularProducts[current].image} alt={popularProducts[current].name} className="product-header-image" />
+              </a>
+              <div className="carousel-caption">
+                <h3>{popularProducts[current].name}</h3>
+                <p>{popularProducts[current].description}</p>
               </div>
-            ))}
+            </div>
+            <button onClick={nextSlide} style={{ fontSize: '2rem', marginLeft: '20px' }}>&gt;</button>
           </div>
         </div>
+        </>
+        
       )}
 
       {/* Trending Products */}

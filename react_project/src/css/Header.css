@@ -83,7 +83,9 @@ header {
     margin-left: 0px;
     align-items: center;
 }
-
+nav {
+    display: flex;
+}
 nav ul {
     list-style: none;
     margin: 0;
