@@ -1,24 +1,33 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // <-- Add this import
 import "../css/CartPage.css";
 
 function CartPage() {
-	const [cartData, setCartData] = useState([]);
-	const [priceSummary, setPriceSummary] = useState({
-		price: 0,
-		tax: 0,
-		delivery: 0,
-		discount: 0,
-		total: 0,
-	});
+    const [cartData, setCartData] = useState([]);
+    const [priceSummary, setPriceSummary] = useState({
+        price: 0,
+        tax: 0,
+        delivery: 0,
+        discount: 0,
+        total: 0,
+    });
+    const navigate = useNavigate(); // <-- Add this line
 
-	useEffect(() => {
-		axios.get("http://localhost:3001/cart").then((res) => {
-			const cart = res.data;
-			setCartData(cart);
-			calculatePriceSummary(cart);
-		});
-	}, []);
+    useEffect(() => {
+        // Check if user is logged in
+        const user = localStorage.getItem('user');
+        if (!user) {
+            navigate('/user-auth'); // <-- Redirect to login if not logged in
+            return;
+        }
+        axios.get("http://localhost:3001/cart").then((res) => {
+            const cart = res.data;
+            setCartData(cart);
+            calculatePriceSummary(cart);
+        });
+    }, [navigate]);
+    // ...existing code...
 
 	// Remove item from cart
 	const removeFromCart = (id) => {
